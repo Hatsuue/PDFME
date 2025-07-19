@@ -1,0 +1,155 @@
+body {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  font-family: 'Inter', Arial, sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  color: #22223b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.container {
+  background: #fff;
+  padding: 2.5rem 2rem;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(79, 140, 255, 0.10), 0 1.5px 6px rgba(0,0,0,0.04);
+  min-width: 340px;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  margin: 2rem auto;
+  transition: box-shadow 0.2s;
+}
+
+h1, h2 {
+  font-weight: 700;
+  color: #3358e4;
+  margin-bottom: 1.2rem;
+  letter-spacing: 1px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  align-items: center;
+}
+
+input[type="file"] {
+  border: 1.5px solid #e0e7ef;
+  border-radius: 10px;
+  padding: 0.7rem;
+  background: #f8fafd;
+  font-size: 1rem;
+  width: 100%;
+  max-width: 260px;
+  transition: border-color 0.2s;
+}
+
+input[type="file"]:focus {
+  border-color: #4f8cff;
+  outline: none;
+}
+
+button[type="submit"], .wa-btn, #copyBtn {
+  background: linear-gradient(90deg, #4f8cff 0%, #3358e4 100%);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 0.8rem 2.4rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(79,140,255,0.08);
+  margin-top: 0.5rem;
+}
+
+button[type="submit"]:hover, .wa-btn:hover, #copyBtn:hover {
+  background: linear-gradient(90deg, #3358e4 0%, #4f8cff 100%);
+  box-shadow: 0 4px 16px rgba(79,140,255,0.12);
+}
+
+a {
+  color: #4f8cff;
+  text-decoration: none;
+  font-size: 0.98rem;
+  transition: color 0.2s;
+}
+
+a:hover {
+  color: #3358e4;
+  text-decoration: underline;
+}
+
+label {
+  font-size: 1.08em;
+  color: #22223b;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+select, input, button {
+  font-family: inherit;
+}
+
+select {
+  width: 100%;
+  padding: 0.7rem;
+  border-radius: 8px;
+  border: 1.5px solid #e0e7ef;
+  font-size: 1em;
+  color: #22223b;
+  background: #f8fafd;
+  margin-bottom: 1rem;
+  transition: border-color 0.2s;
+}
+
+select:focus {
+  border-color: #4f8cff;
+  outline: none;
+}
+
+.amount {
+  font-size: 1.15em;
+  font-weight: bold;
+  margin: 1.2rem 0 0.5rem 0;
+  color: #3358e4;
+}
+
+.instructions {
+  color: #555;
+  font-size: 0.98em;
+  margin-bottom: 1.2rem;
+}
+
+.qris-img {
+  width: 220px;
+  height: 220px;
+  margin-bottom: 16px;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  background: #fafafa;
+  object-fit: contain;
+}
+
+#rekening-number {
+  font-size: 1.15em;
+  color: #4f8cff;
+  font-weight: bold;
+  margin: 8px 0;
+  word-break: break-all;
+}
+
+@media (max-width: 500px) {
+  .container {
+    min-width: unset;
+    max-width: 98vw;
+    padding: 1.2rem 0.5rem;
+  }
+  .qris-img {
+    width: 140px;
+    height: 140px;
+  }
+}

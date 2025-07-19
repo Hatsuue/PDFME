@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sign Up</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background: linear-gradient(135deg, #4f8cff 0%, #a1c4fd 50%, #c2e9fb 100%);
+      font-family: Arial, sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .logo {
+      position: absolute;
+      z-index: 10;
+      flex-direction: column;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      padding: 10px;
+      margin-left: auto;
+      margin-right: auto;
+      display: block;
+      box-shadow: 0 2px 12px rgba(44, 75, 184, 0.15);
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #3358e4;
+      text-decoration: none;
+      justify-content: center;
+      align-items: center;      
+      top: 20px;
+      left: 20px;
+      width: 60px;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(44, 75, 184, 0.15);
+    }
+    .signup-container {
+      background: #fff;
+      padding: 2.2rem 2rem 2rem 2rem;
+      border-radius: 18px;
+      box-shadow: 0 6px 24px rgba(44, 75, 184, 0.10);
+      min-width: 320px;
+      max-width: 370px;
+      width: 100%;
+      text-align: center;
+    }
+    h1 {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #3358e4;
+      margin-bottom: 1.5rem;
+      letter-spacing: 1px;
+    }
+    p {
+      color: #555;
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #22223b;
+      text-align: left;
+      font-size: 0.95rem;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px 10px;
+      border-radius: 8px;
+      border: 1.5px solid #e0e7ef;
+      background-color: #f8fafd;
+      font-size: 1rem;
+      margin-bottom: 1.1rem;
+      box-sizing: border-box;
+    }
+    input:focus {
+      border-color: #3358e4;
+      outline: none;
+      background: #f4f7fb;
+    }
+    button[type="submit"] {
+      background: linear-gradient(90deg, #4f8cff 0%, #3358e4 100%);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 0.8rem 2.2rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 8px rgba(79,140,255,0.08);
+      margin-top: 0.5rem;
+    }
+    button[type="submit"]:hover {
+      background: linear-gradient(90deg, #3358e4 0%, #4f8cff 100%);
+    }
+    @media (max-width: 500px) {
+      .signup-container {
+        min-width: unset;
+        max-width: 98vw;
+        padding: 1.2rem 0.5rem;
+      }
+      h1 {
+        font-size: 1.3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <img src="/static/logo/LOGO.png" alt="Logo PDFME" class="logo">
+  <div class="signup-container">
+    <h1>Sign Up</h1>
+    <p>Selamat datang di PDFME! Silakan daftar untuk mulai menggunakan layanan kami.</p>
+    <form action="/signup{% if next %}?next={{ next }}{% endif %}" method="post">
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" required>
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required>
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required>
+      <input type="hidden" name="next" value="{{ next }}">
+      <button type="submit">Sign Up</button>
+    </form>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  </div>
+</body>
+</html>

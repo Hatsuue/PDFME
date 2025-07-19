@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pembayaran</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .payment-container {
+      background: #fff;
+      padding: 18px 12px 16px 12px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      text-align: center;
+      width: 100%;
+      max-width: 340px;
+    }
+    label {
+      font-size: 1em;
+      color: #333;
+      margin-bottom: 6px;
+      display: block;
+      font-weight: bold;
+      text-align: left;
+    }
+    select {
+      width: 100%;
+      padding: 7px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1em;
+      margin-bottom: 12px;
+      background: #fff;
+      transition: border-color 0.2s;
+    }
+    select:focus {
+      border-color: #007bff;
+      outline: none;
+    }
+    h2 {
+      font-size: 1.1em;
+      color: #222;
+      margin: 0 0 2px 0;
+      font-weight: 600;
+    }
+    p {
+      font-size: 0.98em;
+      color: #6c6c6c;
+      margin: 6px 0 2px 0;
+      line-height: 1.1;
+    }
+    h3 {
+      font-size: 1.1em;
+      color: #555;
+      margin: 6px 0;
+      font-weight: 500;
+    }
+    #rekening-number {
+      font-size: 1.1em;
+      color: #000;
+      font-weight: bold;
+      margin: 6px 0;
+      word-break: break-all;
+    }
+    #copyBtn {
+      padding: 6px 12px;
+      background: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.98em;
+      cursor: pointer;
+      margin-bottom: 8px;
+      margin-top: 2px;
+      transition: background 0.2s;
+    }
+    #copyBtn:hover {
+      background: #0056b3;
+    }
+    .amount {
+      font-size: 1.08em;
+      font-weight: bold;
+      margin: 10px 0 6px 0;
+    }
+    .instructions {
+      color: #555;
+      font-size: 0.95em;
+      margin-bottom: 10px;
+    }
+    .wa-btn {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 8px 16px;
+      background: #25d366;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 1em;
+      font-weight: bold;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .wa-btn:hover {
+      background: #0088ff;
+    }
+    @media (max-width: 400px) {
+      .payment-container {
+        padding: 10px 2vw;
+        max-width: 98vw;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="payment-container">
+    <label for="rekening">Pilih Rekening Tujuan:</label>
+    <select id="rekening" name="rekening">
+      <option value="seabank">Sea Bank</option>
+      <option value="bca">BCA Virtual</option>
+      <option value="bri">BRI Virtual</option>
+      <option value="mandiri">Mandiri Virtual</option>
+      <option value="bni">BNI Virtual</option>
+      <option value="ovo">OVO</option>
+      <option value="gopay">GoPay</option>
+      <option value="dana">DANA</option>
+      <option value="shopeepay">ShopeePay</option>
+    </select>
+    <div id="rekening-info">
+      <h2>Sea Bank</h2>
+      <p>ADIATMA WASARA</p>
+      <h3 id="rekening-number">9016 9922 2256</h3>
+      <button id="copyBtn">Salin Nomor Rekening</button>
+    </div>
+    <div class="amount">Rp. 15.000</div>
+    <div class="instructions">
+      Transfer ke rekening/e-wallet di atas. Pastikan jumlah transfer sesuai agar verifikasi lancar.
+    </div>
+    <div style="font-size:0.93em; color:#888;">
+      <strong>Catatan:</strong>  
+      Untuk virtual account, pastikan nomor benar.  
+      Setelah transfer, konfirmasi ke admin.
+    </div>
+    <a href="https://wa.me/62859102857730" target="_blank" class="wa-btn">
+      Konfirmasi ke Admin via WhatsApp
+    </a>
+    <script>
+      const rekeningData = {
+        seabank: { name: "Sea Bank", number: "9016 9922 2256" },
+        bca: { name: "BCA Virtual", number: "3901 0859 1028 57730" },
+        bri: { name: "BRI Virtual", number: "8881 0859 1028 57730" },
+        mandiri: { name: "Mandiri Virtual", number: "89508 59028 57730" },
+        bni: { name: "BNI Virtual", number: "881 0859 1028 57730" },
+        ovo: { name: "OVO", number: "0859 1028 57730" },
+        gopay: { name: "GoPay", number: "0859 1028 57730" },
+        dana: { name: "DANA", number: "0859 1028 57730" },
+        shopeepay: { name: "ShopeePay", number: "0859 1028 57730" }
+      };
+      const rekeningSelect = document.getElementById('rekening');
+      const rekeningInfo = document.getElementById('rekening-info');
+      const rekeningName = rekeningInfo.querySelector('h2');
+      const rekeningNumber = document.getElementById('rekening-number');
+      const copyBtn = document.getElementById('copyBtn');
+      rekeningSelect.addEventListener('change', function() {
+        const selected = rekeningSelect.value;
+        rekeningName.textContent = rekeningData[selected].name;
+        rekeningNumber.textContent = rekeningData[selected].number;
+      });
+      copyBtn.onclick = function() {
+        const selected = rekeningSelect.value;
+        const rekening = rekeningData[selected].number;
+        navigator.clipboard.writeText(rekening).then(function() {
+          alert("Nomor rekening disalin!");
+        });
+      };
+    </script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  </div>
+</body>
+</html>

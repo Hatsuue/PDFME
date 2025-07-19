@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Hapus Background Gambar</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&display=swap');
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      font-family: 'Montserrat', Arial, sans-serif;
+      background: linear-gradient(135deg, #e0e7ff 0%, #f0f4f8 100%);
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      background-image: url('/static/images/background.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      position: relative;
+    }
+    h1 {
+      margin-top: 40px;
+      margin-bottom: 32px;
+      font-size: 2.5rem;
+      color: #fff;
+      letter-spacing: 2px;
+      background: rgba(255,77,77,0.85);
+      border-radius: 14px;
+      padding: 18px 48px;
+      box-shadow: 0 8px 32px 0 rgba(31,38,135,0.15);
+      border: 2px solid rgba(255,255,255,0.25);
+      backdrop-filter: blur(4px);
+      font-weight: 700;
+      text-shadow: 0 2px 8px #0002;
+    }
+    .drop-zone {
+      border: 2.5px dashed #4f8cff;
+      border-radius: 18px;
+      width: 600px;
+      min-height: 420px;
+      background: rgba(255,255,255,0.25);
+      box-shadow: 0 8px 32px 0 rgba(31,38,135,0.18);
+      backdrop-filter: blur(8px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: box-shadow 0.3s, border-color 0.3s, background 0.3s;
+      position: relative;
+      margin-bottom: 32px;
+    }
+    .drop-zone.dragover {
+      background: rgba(79,140,255,0.12);
+      border-color: #3358e4;
+      box-shadow: 0 0 0 4px #4f8cff33;
+    }
+    .drop-zone img[alt="Drop Here"] {
+      margin-bottom: 18px;
+      opacity: 0.5;
+      transition: opacity 0.2s, transform 0.2s;
+      filter: drop-shadow(0 2px 8px #4f8cff44);
+      transition: transform 0.2s;
+      transform: rotate(6deg);
+    }
+    .drop-zone:hover img[alt="Drop Here"] {
+      transform: scale(1.08) rotate(-6deg);
+    }
+    .drop-zone p {
+      color: #333;
+      font-size: 1.1rem;
+      text-align: center;
+      margin-bottom: 6px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-shadow: 0 1px 4px #fff6;
+    }
+    .drop-zone p#drop-text {
+      color: #ff4f4f;
+      font-size: 1.15rem;
+      margin-bottom: 2px;
+      font-weight: 700;
+    }
+    #preview {
+      margin-top: 18px;
+      max-width: 260px;
+      max-height: 180px;
+      display: none;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px #4f8cff22;
+      border: 2px solid #4f8cff33;
+      background: #fff;
+      transition: box-shadow 0.2s;
+    }
+    #remove-btn {
+      margin-top: 22px;
+      padding: 12px 32px;
+      background: linear-gradient(90deg, #4f8cff 60%, #3358e4 100%);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 2px 8px #4f8cff33;
+      transition: background 0.2s, transform 0.15s;
+      display: none;
+      letter-spacing: 1px;
+    }
+    #remove-btn:hover:not(:disabled) {
+      background: linear-gradient(90deg, #3358e4 60%, #4f8cff 100%);
+      transform: translateY(-2px) scale(1.04);
+    }
+    #remove-btn:disabled {
+      background: #aaa;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+    #download-link {
+      display: inline-block;
+      margin-top: 18px;
+      background: linear-gradient(90deg, #4f8cff 60%, #3358e4 100%);
+      color: #fff;
+      padding: 10px 28px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.05rem;
+      box-shadow: 0 2px 8px #4f8cff33;
+      transition: background 0.2s, transform 0.15s;
+      letter-spacing: 1px;
+    }
+    #download-link:hover {
+      background: linear-gradient(90deg, #3358e4 60%, #4f8cff 100%);
+      transform: translateY(-2px) scale(1.04);
+    }
+    @media (max-width: 600px) {
+      .drop-zone {
+        width: 95vw;
+        min-height: 320px;
+        padding: 12px 0;
+      }
+      #preview {
+        max-width: 90vw;
+        max-height: 120px;
+      }
+      h1 {
+        font-size: 1.5rem;
+        padding: 12px 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome To PDF ME</h1>
+  <div class="drop-zone" id="drop-zone">
+    <img src="/static/icons/drop.png" alt="Drop Here" width="60" height="60">
+    <p id="drop-text">Seret & Lepaskan Gambar di sini</p>
+    <p>atau klik untuk memilih gambar</p>
+    <input type="file" id="file-input" accept="image/*" hidden>
+    <img id="preview" alt="Preview">
+    <button id="remove-btn">Hapus Background</button>
+  </div>
+  <script>
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('file-input');
+    const preview = document.getElementById('preview');
+    const removeBtn = document.getElementById('remove-btn');
+    let selectedFile = null;
+
+    dropZone.addEventListener('click', function(e) {
+      if (e.target === dropZone || e.target.tagName === 'P' || e.target.alt === 'Drop Here') {
+        fileInput.click();
+      }
+    });
+
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('dragover');
+    });
+
+    dropZone.addEventListener('dragleave', () => {
+      dropZone.classList.remove('dragover');
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+      const file = e.dataTransfer.files[0];
+      if (file) {
+        showPreview(file);
+      }
+    });
+
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files.length > 0) {
+        showPreview(fileInput.files[0]);
+      }
+    });
+
+    function showPreview(file) {
+      if (!file.type.startsWith('image/')) {
+        alert('File bukan gambar!');
+        return;
+      }
+      selectedFile = file;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        preview.src = e.target.result;
+        preview.style.display = 'block';
+        removeBtn.style.display = 'inline-block';
+        // Remove download link if exists
+        let downloadLink = document.getElementById('download-link');
+        if (downloadLink) downloadLink.remove();
+      };
+      reader.readAsDataURL(file);
+    }
+
+    removeBtn.addEventListener('click', () => {
+      if (!selectedFile) return;
+      removeBtn.disabled = true;
+      removeBtn.textContent = 'Memproses...';
+      uploadImage(selectedFile);
+    });
+
+    function uploadImage(file) {
+      const formData = new FormData();
+      formData.append("image", file);
+
+      fetch('/remove-background', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => {
+        if (!response.ok) throw new Error("Gagal menghapus background.");
+        return response.blob();
+      })
+      .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        preview.src = url;
+        preview.style.display = 'block';
+        removeBtn.disabled = false;
+        removeBtn.textContent = 'Hapus Background';
+
+        let downloadLink = document.getElementById('download-link');
+        if (!downloadLink) {
+          downloadLink = document.createElement('a');
+          downloadLink.id = 'download-link';
+          downloadLink.textContent = 'Download Hasil';
+          preview.parentNode.appendChild(downloadLink);
+        }
+        downloadLink.href = url;
+        downloadLink.download = "hasil.png";
+      })
+      .catch(error => {
+        alert("❌ Terjadi kesalahan: " + error.message);
+        removeBtn.disabled = false;
+        removeBtn.textContent = 'Hapus Background';
+      });
+    }
+  </script>
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
