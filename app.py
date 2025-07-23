@@ -1,9 +1,13 @@
-from flask import Flask, render_template, request, send_file, session, redirect, url_for, flash
+from flask import Flask, render_template, request, send_file, session, redirect, url_for, flash # type: ignore
 import fitz  # type: ignore # PyMuPDF
 import os
 import uuid
 from rembg import remove # type: ignore
-from PIL import Image
+from PIL import Image # type: ignore
+
+import secrets
+secrets.token_hex(32)
+
 
 app = Flask(__name__)
 app.secret_key = 'ganti_secret_key_anda'
@@ -14,11 +18,11 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 def unique_filename(ext):
     return f"{uuid.uuid4().hex}.{ext}"
 
-@app.route('/')
+@app.route('index.html')
 def index():
     return render_template('index.html')
 
-@app.route('/compress', methods=['GET', 'POST'])
+@app.route('compress.html', methods=['GET', 'POST'])
 def compress_pdf():
     if request.method == 'POST':
         file = request.files.get('pdfFile')
@@ -51,7 +55,7 @@ def compress_pdf():
             return f"Gagal kompres PDF: {e}", 500
     return render_template('compress.html')
 
-@app.route('/compress-premium', methods=['GET', 'POST'])
+@app.route('compress-premium.html', methods=['GET', 'POST'])
 def compress_premium():
     if not session.get('user_id'):
         return redirect(url_for('signup', next='payment'))
@@ -88,7 +92,7 @@ def compress_premium():
             return f"Gagal kompres PDF premium: {e}", 500
     return render_template('compress_premium.html')
 
-@app.route('/signup', methods=['GET', 'POST'])
+@app.route('signup.html', methods=['GET', 'POST'])
 def signup():
     next_page = request.args.get('next')
     if request.method == 'POST':
@@ -104,11 +108,14 @@ def signup():
         return redirect(url_for('index'))
     return render_template('signup.html', next=next_page)
 
-@app.route('/payment')
+@app.route('payment.html')
 def payment():
+    if not session.get('user_id'):
+        flash('Anda harus login terlebih dahulu.')
+        return redirect(url_for('signup', next='payment'))
     return render_template('payment.html')
 
-@app.route('/activate-premium', methods=['POST'])
+@app.route('activate-premium.html', methods=['POST'])
 def activate_premium():
     session['is_premium'] = True
     flash('Akun Anda sudah premium! Silakan gunakan fitur premium.')
@@ -118,9 +125,9 @@ def activate_premium():
 def logout():
     session.clear()
     flash('Anda telah logout.')
-    return redirect(url_for('index'))
+    return redirect(url_for('index.html'))
 
-@app.route('/image-to-pdf', methods=['GET', 'POST'])
+@app.route('image-to-pdf.html', methods=['GET', 'POST'])
 def image_to_pdf():
     if request.method == 'POST':
         files = request.files.getlist('imageFile')
@@ -149,29 +156,24 @@ def image_to_pdf():
             return f"Gagal konversi gambar ke PDF: {e}", 500
     return render_template('image_to_pdf.html')
 
-@app.route('/remove-image', methods=['GET'])
+@app.route('remove-image.html', methods=['GET'])
 def remove_image_page():
-    return render_template('remove-image.html')
-
-@app.route('/remove-background', methods=['POST'])
-def remove_background():
-    file = request.files.get('image')
-    if not file or not file.filename.lower().endswith(('.png', '.jpg', '.jpeg')): # type: ignore
-        return "Gambar tidak ditemukan atau format tidak didukung", 400
+    if 'file' not in request.files:
+        return "Tidak ada file yang diunggah", 400
+    file = request.files['file']
+    if not file or not file.filename.lower().endswith(('png', 'jpg', 'jpeg', 'bmp', 'gif')):
+        return "File tidak valid", 400
     try:
         input_path = os.path.join(UPLOAD_FOLDER, unique_filename('png'))
-        file.save(input_path)
         output_path = os.path.join(UPLOAD_FOLDER, unique_filename('png'))
+        file.save(input_path)
         input_image = Image.open(input_path)
         output_image = remove(input_image)
-        output_image.save(output_path) # type: ignore
-        result = send_file(output_path, as_attachment=True)
+        output_image.save(output_path)
         os.remove(input_path)
-        os.remove(output_path)
-        return result
+        return send_file(output_path, as_attachment=True)
     except Exception as e:
-        print("ERROR REMOVE BG:", e)
-        return f"Gagal hapus background: {e}", 500
+        return f"Gagal menghapus latar belakang: {e}", 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
